@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="copyright" content="gelnyang@163.com">
+<meta name="created" content="20170901">
+<title>Number Converter</title>
+<style type="text/css">
+<!--
+body {background: white; color: black;}
+h1 {font-family: Arial, sans-serif; line-height: 0.85em; border-bottom: 2px solid;
+  margin-bottom: 0.33em; padding-bottom: 0;}
+
+input {background: #EEF;font-size:20px;}
+-->
+</style>
+<script type="text/javascript">
+var number;
+
+function dec() {
+	try{
+		var decValue = document.getElementById('dec').value;
+		number = parseInt(decValue.replace(" ",""));
+		convert();
+		message("");
+	}catch(e){
+		message(e);
+	}
+}
+function hex() {
+	try{
+		var hexValue = document.getElementById('hex').value;
+		number = parseInt(hexValue.replace(" ",""), 16);
+		convert();
+		message("");
+	}catch(e){
+		message(e);
+	}
+}
+function bit() {
+	try{
+		var bitValue = document.getElementById('bit').value;
+		number = parseInt(bitValue.replace(" ",""), 2);
+		convert();
+		message("");
+	}catch(e){
+		message(e);
+	}
+}
+
+function convert(){
+    if(isNaN(number)){
+      return;
+    }
+    document.getElementById('dec').value = number;
+    document.getElementById('hex').value = format(number.toString(16), 4, "0", " ");
+    document.getElementById('bit').value = format(number.toString(2), 8, "0", " ");
+}
+
+function format(str, groupLength, previousChar, groupSplitter){
+    var addLength = groupLength - str.length % groupLength;
+    if( groupLength == addLength) addLength = 0;
+    while( (addLength--) > 0){
+        str = previousChar + str;
+    }
+    var formatStr="";
+    for( var i=0; i < str.length; i=i+groupLength){
+        if( i > 0){
+            formatStr = formatStr + groupSplitter;
+        }
+        formatStr = formatStr + str.substr(i , groupLength);
+    }
+    return formatStr;
+}
+
+function message(msg){
+	document.getElementById('msg_container').innerText=msg;
+}
+</script>
+</head>
+<body>
+<h1>Number Converter (32bit limit)</h1>
+
+DEC:<input id="dec" size="50" oninput="dec()"/><br/>
+HEX:<input id="hex" size="50" oninput="hex()"/> <br/>
+&nbsp;&nbsp;BIT:<input id="bit" size="50" oninput="bit()"/>
+
+<div id="msg_container"><div>
+
+</body></html>
