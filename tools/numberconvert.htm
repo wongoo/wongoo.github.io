@@ -2,7 +2,7 @@
 <html><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="copyright" content="gelnyang@163.com">
-<meta name="created" content="20170901">
+<meta name="created" content="20171017">
 <title>Number Converter</title>
 <style type="text/css">
 <!--
@@ -19,8 +19,10 @@ var number;
 function dec() {
 	try{
 		var decValue = document.getElementById('dec').value;
-		number = parseInt(decValue.replace(" ",""));
-		convert();
+		number = parseInt(decValue.replace(/,/g,""));
+		var fstr = formatStr(decValue,3,",");
+		if(fstr != decValue) document.getElementById('dec').value = fstr;
+		convert("dec");
 		message("");
 	}catch(e){
 		message(e);
@@ -29,8 +31,10 @@ function dec() {
 function hex() {
 	try{
 		var hexValue = document.getElementById('hex').value;
-		number = parseInt(hexValue.replace(" ",""), 16);
-		convert();
+		number = parseInt(hexValue.replace(/ /g,""), 16);
+		var fstr = formatStr(hexValue ,4 ," ");
+		if(fstr != hexValue) document.getElementById('hex').value = fstr;
+		convert("hex");
 		message("");
 	}catch(e){
 		message(e);
@@ -39,21 +43,23 @@ function hex() {
 function bit() {
 	try{
 		var bitValue = document.getElementById('bit').value;
-		number = parseInt(bitValue.replace(" ",""), 2);
-		convert();
+		number = parseInt(bitValue.replace(/ /g,""), 2);
+		var fstr = formatStr(bitValue,8," ");
+		if(fstr != bitValue) document.getElementById('bit').value = fstr;
+		convert("bit");
 		message("");
 	}catch(e){
 		message(e);
 	}
 }
 
-function convert(){
+function convert(from){
     if(isNaN(number)){
       return;
     }
-    document.getElementById('dec').value = number;
-    document.getElementById('hex').value = format(number.toString(16), 4, "0", " ");
-    document.getElementById('bit').value = format(number.toString(2), 8, "0", " ");
+    if(from != "dec") document.getElementById('dec').value = number;
+    if(from != "hex") document.getElementById('hex').value = format(number.toString(16), 4, "0", " ");
+    if(from != "bit") document.getElementById('bit').value = format(number.toString(2), 8, "0", " ");
 }
 
 function format(str, groupLength, previousChar, groupSplitter){
@@ -63,11 +69,30 @@ function format(str, groupLength, previousChar, groupSplitter){
         str = previousChar + str;
     }
     var formatStr="";
-    for( var i=0; i < str.length; i=i+groupLength){
+    for( var i = 0 ; i < str.length; i=i+groupLength){
         if( i > 0){
             formatStr = formatStr + groupSplitter;
         }
         formatStr = formatStr + str.substr(i , groupLength);
+    }
+    return formatStr;
+}
+
+
+function formatStr(s, groupLength, groupSplitter){
+    var str = s.trim().replace(/ /g,"").replace(/,/g,"");
+    var formatStr = "";
+    for( var i=str.length; i >0 ; i= i - groupLength){
+        var len = groupLength;
+        var start = i - len;
+        if( start < 0 ) {
+            len = i;
+            start = 0;
+        }
+        formatStr =  str.substr(start , len) + formatStr;
+        if( i > groupLength){
+            formatStr =  groupSplitter + formatStr;
+        }
     }
     return formatStr;
 }
@@ -78,7 +103,7 @@ function message(msg){
 </script>
 </head>
 <body>
-<h1>Number Converter (32bit limit)</h1>
+<h1>Number Converter</h1>
 
 DEC:<input id="dec" size="50" oninput="dec()"/><br/>
 HEX:<input id="hex" size="50" oninput="hex()"/> <br/>
