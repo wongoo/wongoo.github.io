@@ -10,7 +10,7 @@ body {background: white; color: black;}
 h1 {font-family: Arial, sans-serif; line-height: 0.85em; border-bottom: 2px solid;
   margin-bottom: 0.33em; padding-bottom: 0;}
 
-input {background: #EEF;font-size:20px;}
+input {background: #EEF;font-size:28px;}
 -->
 </style>
 <script type="text/javascript">
@@ -58,7 +58,7 @@ function convert(from){
       return;
     }
     if(from != "dec") document.getElementById('dec').value = number;
-    if(from != "hex") document.getElementById('hex').value = format(number.toString(16), 4, "0", " ");
+    if(from != "hex") document.getElementById('hex').value = format(number.toString(16).toUpperCase(), 4, "0", " ");
     if(from != "bit") document.getElementById('bit').value = format(number.toString(2), 8, "0", " ");
 }
 
@@ -80,7 +80,7 @@ function format(str, groupLength, previousChar, groupSplitter){
 
 
 function formatStr(s, groupLength, groupSplitter){
-    var str = s.trim().replace(/ /g,"").replace(/,/g,"");
+    var str = s.trim().replace(/ /g,"").replace(/,/g,"").toUpperCase();
     var formatStr = "";
     for( var i=str.length; i >0 ; i= i - groupLength){
         var len = groupLength;
@@ -105,9 +105,9 @@ function message(msg){
 <body>
 <h1>Number Converter</h1>
 
-DEC:<input id="dec" size="50" oninput="dec()"/><br/>
-HEX:<input id="hex" size="50" oninput="hex()"/> <br/>
-&nbsp;&nbsp;BIT:<input id="bit" size="50" oninput="bit()"/>
+DEC:<input id="dec" size="100" oninput="dec()"/><br/>
+HEX:<input id="hex" size="100" oninput="hex()"/> <br/>
+&nbsp;&nbsp;BIT:<input id="bit" size="100" oninput="bit()"/>
 
 <div id="msg_container"><div>
 
