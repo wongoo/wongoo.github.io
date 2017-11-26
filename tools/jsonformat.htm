@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="copyright" content="gelnyang@163.com">
+<meta name="created" content="20171126">
+<title>Json Format</title>
+<style type="text/css">
+<!--
+body {background: white; color: black;}
+h1 {font-family: Arial, sans-serif; border-bottom: 2px solid;
+  margin-bottom: 0.33em; padding-bottom: 0;}
+
+textarea,pre {background: #EEF;font-size:12px;}
+-->
+</style>
+<script type="text/javascript">
+function formatjson(){
+    try{
+        var textarea = document.getElementById("json");
+        var text = textarea.value;
+        console.log(text);
+        var oldJson = JSON.parse(text);
+        var json = JSON.stringify(oldJson, null, '\t');
+        console.log(json);
+        document.getElementById("formatedjson").innerText = json;
+    }catch(e){
+        message(e);
+    }
+}
+
+function message(msg){
+	document.getElementById('msg_container').innerText=msg;
+}
+</script>
+</head>
+<body>
+<h1>Json Converter</h1>
+<div>
+    <pre id="formatedjson" style="float: right; width: 49%;">
+    </pre>
+<br/>
+<textarea id="json" rows="10" style="width:49%;"></textarea>
+<div>
+<button onclick="formatjson()" >format</button>
+<br/>
+<div id="msg_container"><div>
+
+</body></html>
