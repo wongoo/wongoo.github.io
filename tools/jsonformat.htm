@@ -20,7 +20,11 @@ function formatjson(){
         var text = textarea.value;
         console.log(text);
         var oldJson = JSON.parse(text);
-        var json = JSON.stringify(oldJson, null, '\t');
+        var formatChar = '\t';
+        if( document.getElementById("typeblank").checked){
+        	formatChar = '  ';
+        }
+        var json = JSON.stringify(oldJson, null, formatChar);
         console.log(json);
         document.getElementById("formatedjson").innerText = json;
     }catch(e){
@@ -41,7 +45,9 @@ function message(msg){
 <br/>
 <textarea id="json" rows="10" style="width:49%;"></textarea>
 <div>
-<button onclick="formatjson()" >format</button>
+<input id="typeblank" type="radio" name="type" value="blank" checked="checked">Blank Mode
+<input id="typetab" type="radio" name="type" value="tab">TAB Mode
+<button onclick="formatjson()" >FORMAT</button>
 <br/>
 <div id="msg_container"><div>
 
