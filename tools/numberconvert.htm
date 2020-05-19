@@ -11,6 +11,7 @@ h1 {font-family: Arial, sans-serif; line-height: 0.85em; border-bottom: 2px soli
   margin-bottom: 0.33em; padding-bottom: 0;}
 
 input {background: #EEF;font-size:28px;}
+input.label {background: #FFF; font-size:16px; border: 0px;}
 -->
 </style>
 <script type="text/javascript">
@@ -20,8 +21,6 @@ function dec() {
 	try{
 		var decValue = document.getElementById('dec').value;
 		number = parseInt(decValue.replace(/,/g,""));
-		var fstr = formatStr(decValue,3,",");
-		if(fstr != decValue) document.getElementById('dec').value = fstr;
 		convert("dec");
 		message("");
 	}catch(e){
@@ -57,9 +56,46 @@ function convert(from){
     if(isNaN(number)){
       return;
     }
-    if(from != "dec") document.getElementById('dec').value = number;
-    if(from != "hex") document.getElementById('hex').value = format(number.toString(16).toUpperCase(), 4, "0", " ");
-    if(from != "bit") document.getElementById('bit').value = format(number.toString(2), 8, "0", " ");
+    if(from != "dec") document.getElementById('dec').value = formatStr(""+number,3,",");
+    if(from != "hex") document.getElementById('hex').value = format(number.toString(16).toUpperCase(), 4, "0", "  ");
+    if(from != "bit") document.getElementById('bit').value = format(number.toString(2), 8, "0", "  ");
+
+    document.getElementById('codepoint_char').innerText = String.fromCodePoint(number);
+
+    showEncodeBytes("utf-8", "utf8_bytes");
+    showUTF16Bytes();
+}
+
+function showEncodeBytes(charset, target){
+    let char = String.fromCodePoint(number);
+
+    let uint8array = new TextEncoder(charset).encode(char);
+    
+    document.getElementById(target+'_length').innerText = uint8array.length;
+
+    let bytesInput = document.getElementById(target);
+    bytesInput.value = "";
+    for( var i = 0 ; i < uint8array.length; i++){
+        if (i > 0){
+            bytesInput.value += "  "
+        }
+        bytesInput.value += uint8array[i].toString(16).toUpperCase();
+    }
+}
+
+
+function showUTF16Bytes(){
+    let char = String.fromCodePoint(number);
+    document.getElementById('utf16_bytes_length').innerText = char.length * 2;
+
+    let bytesInput = document.getElementById('utf16_bytes');
+    bytesInput.value = "";
+    for( var i = 0 ; i < char.length; i++){
+        if (i > 0){
+            bytesInput.value += "  "
+        }
+        bytesInput.value += char.charCodeAt(i).toString(16).toUpperCase();
+    }
 }
 
 function format(str, groupLength, previousChar, groupSplitter){
@@ -107,7 +143,14 @@ function message(msg){
 
 DEC:<input id="dec" size="100" oninput="dec()"/><br/>
 HEX:<input id="hex" size="100" oninput="hex()"/> <br/>
-&nbsp;&nbsp;BIT:<input id="bit" size="100" oninput="bit()"/>
+&nbsp;&nbsp;BIT:<input id="bit" size="100" oninput="bit()"/><br/>
+
+<hr>
+unicode code point char: <label id="codepoint_char"></label><br/>
+UTF-8 bytes length: <label id="utf8_bytes_length"></label><br/>
+UTF-8 bytes: <input id="utf8_bytes" readonly="readonly" size="50" class="label" /><br/>
+UTF-16 bytes length: <label id="utf16_bytes_length"></label><br/>
+UTF-16 bytes: <input id="utf16_bytes" readonly="readonly" size="50" class="label"  /><br/>
 
 <div id="msg_container"><div>
 
