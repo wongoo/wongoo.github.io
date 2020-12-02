@@ -1,54 +1,67 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-<html><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="copyright" content="gelnyang@163.com">
-<meta name="created" content="20171126">
-<title>Json Format</title>
-<style type="text/css">
-<!--
-body {background: white; color: black;}
-h1 {font-family: Arial, sans-serif; border-bottom: 2px solid;
-  margin-bottom: 0.33em; padding-bottom: 0;}
-
-textarea,pre {background: #EEF;font-size:12px;}
--->
-</style>
-<script type="text/javascript">
-function formatjson(){
-    try{
-        var textarea = document.getElementById("json");
-        var text = textarea.value;
-        console.log(text);
-        var oldJson = JSON.parse(text);
-        var formatChar = '\t';
-        if( document.getElementById("typeblank").checked){
-        	formatChar = '  ';
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="copyright" content="gelnyang@163.com">
+    <meta name="created" content="20171126">
+    <title>Json Format</title>
+    <style type="text/css">
+        <!--
+        body {
+            background: white;
+            color: black;
         }
-        var json = JSON.stringify(oldJson, null, formatChar);
-        console.log(json);
-        document.getElementById("formatedjson").innerText = json;
-    }catch(e){
-        message(e);
-    }
-}
 
-function message(msg){
-	document.getElementById('msg_container').innerText=msg;
-}
-</script>
+        h1 {
+            font-family: Arial, sans-serif;
+            border-bottom: 2px solid;
+            margin-bottom: 0.33em;
+            padding-bottom: 0;
+        }
+
+        textarea, pre {
+            background: #EEF;
+            font-size: 12px;
+        }
+
+        #msg_container {
+            color: red;
+        }
+
+        -->
+    </style>
+    <script type="text/javascript">
+        function formatJson() {
+            try {
+                let textarea = document.getElementById("json");
+                let text = textarea.value;
+                console.log(text);
+                let oldJson = JSON.parse(text);
+                let formatChar = '\t';
+                if (document.getElementById("typeblank").checked) {
+                    formatChar = '  ';
+                }
+                let json = JSON.stringify(oldJson, null, formatChar);
+                console.log(json);
+                textarea.value = json;
+                message("");
+            } catch (e) {
+                message(e);
+            }
+        }
+
+        function message(msg) {
+            document.getElementById('msg_container').innerText = msg;
+        }
+    </script>
 </head>
 <body>
 <h1>Json Format</h1>
-<div>
-    <pre id="formatedjson" style="float: right; width: 49%;">
-    </pre>
-<br/>
-<textarea id="json" rows="10" style="width:49%;"></textarea>
-<div>
 <input id="typeblank" type="radio" name="type" value="blank" checked="checked">Blank Mode
 <input id="typetab" type="radio" name="type" value="tab">TAB Mode
-<button onclick="formatjson()" >FORMAT</button>
 <br/>
-<div id="msg_container"><div>
-
-</body></html>
+<div id="msg_container">
+</div>
+<textarea id="json" rows="50" style="width:99%;" onkeyup="formatJson()"></textarea>
+</body>
+</html>
